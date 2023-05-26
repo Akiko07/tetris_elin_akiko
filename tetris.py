@@ -1,10 +1,11 @@
 import pygame
 
+
 class Tetris:
     height = 0
     width = 0
     field = []
-    score= 0
+    score = 0
     state = "start"
 
     def __init__(self, _height, _width):
@@ -23,7 +24,7 @@ class Tetris:
 
 
 pygame.init()
-screen = pygame.display.set_mode([400,500])
+screen = pygame.display.set_mode([400, 500])
 pygame.display.set_caption("Tetris")
 
 done = False
@@ -75,7 +76,7 @@ while not done:
     screen.fill(color=EGGSHELL)
     for i in range(game.height):
         for j in range(game.width):
-            pygame.draw.rect(screen, GRAY, [])
+            pygame.draw.rect(screen, GRAY, [j, i, 1, 1], 1)
 
     clock.tick(fps)
 
