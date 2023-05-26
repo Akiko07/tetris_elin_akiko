@@ -1,6 +1,14 @@
 import pygame
 
-
+colors = [
+    (0,0,0),
+    (120,37,179),
+    (100,179,179),
+    (80,34,22),
+    (80,134,22),
+    (180,34,22),
+    (180,34,122)
+]
 class Tetris:
     height = 0
     width = 0
@@ -31,6 +39,7 @@ done = False
 fps = 25
 clock = pygame.time.Clock()
 counter = 0
+zoom = 23
 
 game = Tetris(20, 10)
 pressing_down = False
@@ -76,8 +85,15 @@ while not done:
     screen.fill(color=EGGSHELL)
     for i in range(game.height):
         for j in range(game.width):
-            pygame.draw.rect(screen, GRAY, [j, i, 1, 1], 1)
+            if game.field[i][j] == 0:
+                color = GRAY
+                just_border = 1
+            else:
+                color = colors[game.field[i][j]]
+                just_border = 0
+            pygame.draw.rect(screen, color, [80+j*zoom, 10+i*zoom, zoom, zoom], just_border)
 
+    pygame.display.flip()
     clock.tick(fps)
 
 
