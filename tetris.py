@@ -2,7 +2,7 @@ import pygame
 import random
 
 colors = [
-    (0,0,0),
+    (0,0,0)
     (0,240,240), #4 in einer Reihe
     (0,0,240), #Reverse L
     (240,160,0), #L
@@ -60,10 +60,24 @@ class Tetris:
         self.Figure = Figure(3, 0)
     def go_down(self):
         self.Figure.y += 1
+        if self.intersects():
+            self.Figure.y -= 1
+            self.freeze()
 
     def side(self, dx):
         old_x = self.Figure.x
-        self.Figure.x += dx
+        edge = False
+        for i in range(4):
+            for j in range(4):
+                p = i*4+j
+                if p in self.Figure.image():
+                    if j + self.Figure.x + dx > self.width -1 or \
+                        j + self.Figure.x + dx  < 0:
+                        edge = True
+        if not edge:
+            self.Figure.x += dx
+        if self.intersects():
+            self.Figure.x = old_x
 
     def left(self):
         self.side(-1)
@@ -72,10 +86,53 @@ class Tetris:
         self.side(1)
 
     def down(self):
-        pass
+        while not self.intersects():
+            self.Figure.y += 1
+        self.Figure.y -= 1
+        self.freeze()
 
     def rotate(self):
-        pass
+        old_rotation = self.Figure.rotation
+        self.Figure.rotate()
+        if self.intersects():
+            self.Figure.rotation = old_rotation
+
+    def intersects (self):
+        intersection = False
+        for i in range(4):
+            for j in range(4):
+                p = i * 4 + j
+                if p in self.Figure.image():
+                    if i + self.Figure.y > self.height -1 or \
+                        i + self.Figure.y < 0 or \
+                        self.field[i + self.Figure.y][j + self.Figure.x] > 0:
+                        intersection = True
+        return intersection
+
+    def freeze(self):
+        for i in range(4):
+            for j in range(4):
+                p = i * 4 + j
+                if p in self.Figure.image():
+                    self.field[i + self.Figure.y][j + self.Figure.x] = self.Figure.type+1
+        self.new_figure()
+        if self.intersects():
+            self.state == "gameover"
+
+    def break_lines(self):
+        lines = 0
+        for i in range(1, self.height):
+            zeros = 0
+            for j in range(self.width):
+                if self.field[i][j] == 0:
+                    zeros += 1
+            if zeros == 0:
+                lines += 1
+                for i2 in range(i, 1, -1):
+                    for j in range(self.width):
+                        self.field[i2][j] =self.field[i2 - 1][j]
+            self.score += lines
+
 
 
 pygame.init()
@@ -103,8 +160,8 @@ while not done:
         game.go_down()
 
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN
-            if event.key == pygame.K_w:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
                 game.rotate()
             if event.key == pygame.K_DOWN:
                 pressing_down = True
@@ -112,7 +169,6 @@ while not done:
                 pressing_left = True
             if event.key == pygame.K_RIGHT:
                 pressing_right = True
-
 
 
         if event.type == pygame.KEYUP:
