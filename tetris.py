@@ -75,7 +75,7 @@ class Tetris:
         pass
 
     def rotate(self):
-        self.Figure.rotate()
+        pass
 
 
 pygame.init()
@@ -104,7 +104,7 @@ while not done:
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_w:
                 game.rotate()
             if event.key == pygame.K_DOWN:
                 pressing_down = True
@@ -140,6 +140,7 @@ while not done:
                 color = colors[game.field[i][j]]
                 just_border = 0
             pygame.draw.rect(screen, color, [80+j*zoom, 10+i*zoom, zoom, zoom], just_border)
+
     if game.Figure is not None:
         for i in range(4):
             for j in range(4):
@@ -150,9 +151,6 @@ while not done:
 
     pygame.display.flip()
     clock.tick(fps)
-
-
-
 
 
     for event in pygame.event.get():
