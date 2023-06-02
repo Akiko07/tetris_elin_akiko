@@ -131,7 +131,7 @@ class Tetris:
                 for i2 in range(i, 1, -1):
                     for j in range(self.width):
                         self.field[i2][j] =self.field[i2 - 1][j]
-            self.score += lines
+            self.score += lines ** 2
 
 
 
@@ -204,6 +204,14 @@ while not done:
                 if p in game.Figure.image():
                     pygame.draw.rect(screen, game.Figure.color,
                                      [80+(j + game.Figure.x)*zoom, 10+(i+ game.Figure.y)*zoom, zoom, zoom])
+
+    gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
+    text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (255, 215, 0))
+
+    if game.state == "gameover":
+        screen.blit(text_gameover, [30, 250])
+
+
 
     pygame.display.flip()
     clock.tick(fps)
