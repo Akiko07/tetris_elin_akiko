@@ -2,7 +2,7 @@ import pygame
 import random
 
 colors = [
-    (0,0,0)
+    (0,0,0),
     (0,240,240), #4 in einer Reihe
     (0,0,240), #Reverse L
     (240,160,0), #L
@@ -207,6 +207,13 @@ while not done:
 
     gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
     text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (255, 215, 0))
+
+    if game.state == "gameover":
+        screen.blit(text_gameover, [30, 250])
+
+    score = pygame.font.SysFont('Calibri', 25 , True, False)
+    text_score = gameover_font.render("Score: " + str(game.score), True, (0, 0, 0))
+    screen.blit(text_score, [0, 0])
 
     if game.state == "gameover":
         screen.blit(text_gameover, [30, 250])
