@@ -117,7 +117,7 @@ class Tetris:
                     self.field[i + self.Figure.y][j + self.Figure.x] = self.Figure.type+1
         self.new_figure()
         if self.intersects():
-            self.state == "gameover"
+            self.state = "gameover"
 
     def break_lines(self):
         lines = 0
