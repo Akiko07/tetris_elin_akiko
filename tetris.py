@@ -160,23 +160,24 @@ while not done:
         game.go_down()
 
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.QUIT:
+            done = True
+        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 game.rotate()
-            if event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN:
                 pressing_down = True
-            if event.key == pygame.K_LEFT:
+            elif event.key == pygame.K_LEFT:
                 pressing_left = True
-            if event.key == pygame.K_RIGHT:
+            elif  event.key == pygame.K_RIGHT:
                 pressing_right = True
 
-
-        if event.type == pygame.KEYUP:
+        elif event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 pressing_down = False
-            if event.key == pygame.K_LEFT:
+            elif event.key == pygame.K_LEFT:
                 pressing_left = False
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 pressing_right = False
 
         if pressing_down:
