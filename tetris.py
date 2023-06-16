@@ -1,4 +1,5 @@
 import pygame
+import math
 import random
 
 colors = [
@@ -161,7 +162,7 @@ while not done:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            done = True
+            game.quit()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 game.rotate()
@@ -226,7 +227,11 @@ while not done:
 
 
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
             done = True
+        if event.type == pygame.KEYDOWN:
+            if event.type == pygame.K_RIGHT:
+               x = x+1
 pygame.quit()
 
