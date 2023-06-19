@@ -120,6 +120,7 @@ class Tetris:
                 p = i * 4 + j
                 if  p in self.Figure.image():
                     self.field[i + self.Figure.y][j + self.Figure.x] = self.Figure.type+1
+        self.break_lines()
         self.new_figure()
         if self.intersects():
             self.state == "gameover"
@@ -134,6 +135,10 @@ class Tetris:
             if zeros == 0:
                 lines += 1
                 for i2 in range(i, 1, -1):
+                    for j in range(self.width):
+                        self.field[i2][j] = self.field[i2 - 1][j]
+            self.score += lines ** 2
+
 
 
 pygame.init()
@@ -205,8 +210,18 @@ while not done:
             for j in range(4):
                 p= i * 4 + j
                 if p in game.Figure.image():
-                    pygame.draw.rect(screen, game.Figure.color,
+                    pygame.draw.rect(screen, game.Figure.color,\
                                      [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y)* zoom, zoom, zoom])
+
+    gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
+    text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (255, 215, 2))
+
+    if game.state == "gameover":
+        screen.blit(text_gameover, [30, 250])
+
+    score_font = pygame.font.SysFont('Calibri', 25, True, False)
+    text_score = gameover_font.render("Score: " + str(game.score), True, (0, 0, 0))
+    screen.blit(text_score, [0, 0])
 
     pygame.display.flip()
     clock.tick(fps)
