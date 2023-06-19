@@ -2,7 +2,6 @@ import pygame
 import random
 
 colors = [
-    (0,0,0),
     (204,236,239), #4 in einer Reihe
     (117,137,191), #Reverse L
     (253,202,162), #L
@@ -30,7 +29,7 @@ class Figure:
         self.x = x_coord
         self.y = y_coord
         self.type = random.randint(0, len(self.Figures)-1)
-        self.color = colors[self.type+1]
+        self.color = colors[self.type]
         self.rotation = 0
 
     def image(self):
@@ -65,10 +64,15 @@ class Tetris:
 
     def go_down(self):
         self.Figure.y += 1
+        if self.intersects():
+            self.Figure.y -= 1
+            self.freeze()
 
     def side(self, dx):
         old_x = self.Figure
         self.Figure.x += dx
+        if self.intersects():
+            self.Figure.x = old_x
 
     def left(self):
         self.side(-1)
@@ -80,8 +84,32 @@ class Tetris:
         pass
 
     def rotate(self):
+        old_rotation = self.Figure.rotation
         self.Figure.rotate()
+        if self.intersects():
+            self.Figure.rotation = old_rotation
 
+    def intersects(self):
+        intersection = False
+        for i in range(4):
+            for j in range(4):
+                p = i * 4 + j
+                if p in self.Figure.image():
+                    if i + self.Figure.y > self.height - 1 or \
+                        i + self.Figure.y < 0 or \
+                        self.field[i + self.Figure.y][j + self.Figure.x] > 0:
+                        intersection = True
+        return intersection
+
+    def freeze(self):
+        for i in range(4):
+            for j in range(4):
+                p = i * 4 + j
+                if  p in self.Figure.image():
+                    self.field[i + self.Figure.y][j + self.Figure.x] = self.Figure.type
+        self.new_figure()
+        if self.intersects():
+            self.state == "gameover"
 
 pygame.init()
 screen = pygame.display.set_mode((380, 670))
