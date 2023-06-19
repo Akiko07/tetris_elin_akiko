@@ -2,6 +2,7 @@ import pygame
 import random
 
 colors = [
+    (0,0,0),
     (204,236,239), #4 in einer Reihe
     (117,137,191), #Reverse L
     (253,202,162), #L
@@ -29,7 +30,7 @@ class Figure:
         self.x = x_coord
         self.y = y_coord
         self.type = random.randint(0, len(self.Figures)-1)
-        self.color = colors[self.type]
+        self.color = colors[self.type+1]
         self.rotation = 0
 
     def image(self):
@@ -70,7 +71,16 @@ class Tetris:
 
     def side(self, dx):
         old_x = self.Figure
-        self.Figure.x += dx
+        edge = False
+        for i in range (4):
+            for j in range (4):
+                p = i * 4 + j
+                if p in self.Figure.image():
+                    if j + self.Figure.x + dx > self.width -1 or \
+                        j + self.Figure.x + dx < 0:
+                        edge = True
+        if not edge:
+            self.Figure.x += dx
         if self.intersects():
             self.Figure.x = old_x
 
@@ -81,7 +91,10 @@ class Tetris:
         self.side(1)
 
     def down(self):
-        pass
+        while not self.intersects():
+            self.Figure.y += 1
+        self.Figure.y -= 1
+        self.freeze()
 
     def rotate(self):
         old_rotation = self.Figure.rotation
@@ -106,10 +119,22 @@ class Tetris:
             for j in range(4):
                 p = i * 4 + j
                 if  p in self.Figure.image():
-                    self.field[i + self.Figure.y][j + self.Figure.x] = self.Figure.type
+                    self.field[i + self.Figure.y][j + self.Figure.x] = self.Figure.type+1
         self.new_figure()
         if self.intersects():
             self.state == "gameover"
+
+    def break_lines(self):
+        lines = 0
+        for i in range(1, self.height):
+            zeros = 0
+            for j in range(self.width):
+                if self.field[i][j] == 0:
+                    zeros += 1
+            if zeros == 0:
+                lines += 1
+                for i2 in range(i, 1, -1):
+
 
 pygame.init()
 screen = pygame.display.set_mode((380, 670))
