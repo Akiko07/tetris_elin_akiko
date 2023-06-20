@@ -1,4 +1,3 @@
-import random
 from grid import Grid
 from blocks import *
 import random

@@ -214,7 +214,7 @@ while not done:
                                      [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y) * zoom, zoom, zoom])
 
     gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
-    text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (255, 215, 2))
+    text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (0, 0, 0))
 
     if game.state == "gameover":
         screen.blit(text_gameover, [30, 250])
