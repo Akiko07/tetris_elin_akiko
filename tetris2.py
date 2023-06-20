@@ -9,7 +9,7 @@ colors = [
     (255,250,129), #Block
     (249,140,182), #S
     (193,179,215), #T
-    (281,225,174) #Reverse S
+    (255,225,174) #Reverse S
 ]
 
 class Figure:
@@ -123,7 +123,7 @@ class Tetris:
         self.break_lines()
         self.new_figure()
         if self.intersects():
-            self.state == "gameover"
+            self.state = "gameover"
 
     def break_lines(self):
         lines = 0
@@ -210,8 +210,8 @@ while not done:
             for j in range(4):
                 p= i * 4 + j
                 if p in game.Figure.image():
-                    pygame.draw.rect(screen, game.Figure.color,\
-                                     [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y)* zoom, zoom, zoom])
+                    pygame.draw.rect(screen, game.Figure.color,
+                                     [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y) * zoom, zoom, zoom])
 
     gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
     text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (255, 215, 2))
