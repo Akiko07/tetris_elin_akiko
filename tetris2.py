@@ -5,7 +5,7 @@ pygame.init()
 
 colors = [
     (0,0,0),
-    (204,236,239), # 4 in einer Reihe
+    (204,236,238), # 4 in einer Reihe
     (117,137,191), # Reverse L
     (253,202,162), # L
     (255,250,129), # Block
