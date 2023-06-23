@@ -151,6 +151,7 @@ class Tetris:
             SoundClear.set_volume(1)
             pygame.mixer.Sound.play(SoundClear)
 
+
     # Funktion zum Neustart des Spiels
 def restart_game(self):
     global game
@@ -158,7 +159,7 @@ def restart_game(self):
 
 
 pygame.init()
-screen = pygame.display.set_mode((380, 670))
+screen = pygame.display.set_mode((700, 700))
 pygame.display.set_caption("Tetris")
 
 done = False
@@ -254,14 +255,14 @@ while not done:
                                      [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y) * zoom, zoom, zoom])
 
     gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
-    text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (0, 0, 0))
+    text_gameover = gameover_font.render("Game Over!", True, (0, 0, 0))
 
     if game.state == "gameover":
-        screen.blit(text_gameover, [30, 250])
+        screen.blit(text_gameover, [20, 250])
 
     score_font = pygame.font.SysFont('Calibri', 25, True, False)
     text_score = gameover_font.render("Score: " + str(game.score), True, (0, 0, 0))
-    screen.blit(text_score, [0, 0])
+    screen.blit(text_score, [400, 100])
 
     pygame.display.flip()
     clock.tick(fps)
