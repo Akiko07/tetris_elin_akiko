@@ -1,6 +1,8 @@
 import pygame
 import random
 
+pygame.init()
+
 colors = [
     (0,0,0),
     (204,236,239), # 4 in einer Reihe
@@ -9,8 +11,14 @@ colors = [
     (255,250,129), # Block
     (249,140,182), # S
     (193,179,215), # T
-    (255,225,174) # Reverse S
+    (247,140,182) # Reverse S
 ]
+
+SoundBackground = pygame.mixer.Sound("Sounds\\Sounds_music.ogg")
+
+SoundRotate = pygame.mixer.Sound("Sounds\\Sounds_rotate.ogg")
+
+SoundClear = pygame.mixer.Sound("Sounds\\Sounds_clear.ogg")
 
 class Figure:
     x = 0
@@ -138,7 +146,7 @@ class Tetris:
                     for j in range(self.width):
                         self.field[i2][j] = self.field[i2 - 1][j]
             self.score += lines ** 2
-
+            SoundClear.set_volume(1)
 
 
 pygame.init()
@@ -164,19 +172,25 @@ while not done:
     if game.state == "start":
         game.go_down()
 
+    pygame.mixer.Sound.play(SoundBackground)
+    SoundBackground.set_volume(0)
+    SoundBackground.play(-1)
+
+    SoundBackground.set_volume(2)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 game.rotate()
+                pygame.mixer.Sound.play(SoundRotate)
             if event.key == pygame.K_DOWN:
                 pressing_down = True
             if event.key == pygame.K_LEFT:
                 pressing_left = True
             if event.key == pygame.K_RIGHT:
                 pressing_right = True
-
 
 
         if event.type == pygame.KEYUP:
@@ -204,6 +218,7 @@ while not done:
                 color = colors[game.field[i][j]]
                 just_border = 0
             pygame.draw.rect(screen, color, [30+j*zoom, 30+i*zoom, zoom, zoom], just_border)
+
 
     if game.Figure is not None:
         for i in range(4):
