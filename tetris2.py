@@ -20,6 +20,10 @@ SoundRotate = pygame.mixer.Sound("Sounds\\Sounds_rotate.ogg")
 
 SoundClear = pygame.mixer.Sound("Sounds\\Sounds_clear.ogg")
 
+
+icon = pygame.image.load("icon2.png")
+pygame.display.set_icon(icon)
+
 class Figure:
     x = 0
     y = 0
@@ -259,6 +263,7 @@ while not done:
     text_gameover = gameover_font.render("Game Over!", True, (0, 0, 0))
 
     if game.state == "gameover":
+        SoundBackground.stop()
         screen.blit(text_gameover, [20, 250])
 
     score_font = pygame.font.SysFont('Calibri', 25, True, False)
