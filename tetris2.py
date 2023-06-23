@@ -20,8 +20,14 @@ SoundRotate = pygame.mixer.Sound("Sounds\\Sounds_rotate.ogg")
 
 SoundClear = pygame.mixer.Sound("Sounds\\Sounds_clear.ogg")
 
+SoundGameOver = pygame.mixer.Sound("Sounds\\negative_beeps-6008.mp3")
+
 icon = pygame.image.load("icon2.png")
 pygame.display.set_icon(icon)
+
+screen = pygame.display.set_mode((700, 670))
+pygame.display.set_caption("Tetris")
+
 
 class Figure:
     x = 0
@@ -180,8 +186,6 @@ class Tetris:
 
 
 pygame.init()
-screen = pygame.display.set_mode((700, 670))
-pygame.display.set_caption("Tetris")
 
 done = False
 fps = 2.5
@@ -193,6 +197,8 @@ game = Tetris(20, 10)
 pressing_down = False
 pressing_left = False
 pressing_right = False
+
+game_over_sound_played = False
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -278,18 +284,22 @@ while not done:
         text_rect.center = restart_button_rect.center
         screen.blit(text, text_rect)
 
+
         # Checking for user interaction
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if restart_button_rect.collidepoint(event.pos):
                     game = Tetris(20, 10)
-
     gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
     text_gameover = gameover_font.render("Game Over!", True, (0, 0, 0))
 
     if game.state == "gameover":
         SoundBackground.stop()
         screen.blit(text_gameover, [20, 250])
+
+    if game.state == "gameover" and not game_over_sound_played:
+        SoundGameOver.play()
+        game_over_sound_played = True
 
     score_font = pygame.font.SysFont('Calibri', 25, True, False)
     text_score = gameover_font.render("Score: " + str(game.score), True, (0, 0, 0))
