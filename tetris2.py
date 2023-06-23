@@ -25,6 +25,7 @@ SoundGameOver = pygame.mixer.Sound("Sounds\\negative_beeps-6008.mp3")
 icon = pygame.image.load("icon2.png")
 pygame.display.set_icon(icon)
 
+
 screen = pygame.display.set_mode((700, 670))
 pygame.display.set_caption("Tetris")
 
@@ -279,7 +280,7 @@ while not done:
         pygame.draw.rect(screen, (0, 0, 0), restart_button_rect)
 
         font = pygame.font.SysFont('Calibri', 21)
-        text = font.render("Neu starten", True, (255, 255, 255))
+        text = font.render("Play again", True, (255, 255, 255))
         text_rect = text.get_rect()
         text_rect.center = restart_button_rect.center
         screen.blit(text, text_rect)
@@ -303,11 +304,31 @@ while not done:
 
     score_font = pygame.font.SysFont('Calibri', 25, True, False)
     text_score = gameover_font.render("Score: " + str(game.score), True, (0, 0, 0))
-    screen.blit(text_score, [400, 100])
+    screen.blit(text_score, [400, 50])
+
+    controls_font = pygame.font.SysFont("Calibri", 20, True, False)
+    text_controls = controls_font.render("Controls:", True, (128,128,128))
+    screen.blit(text_controls, [400, 250])
+
+    left_font = pygame.font.SysFont("Calibri", 15, True, False)
+    text_left = left_font.render("Left = left arrow key (←)", True, (128,128,128))
+    screen.blit(text_left, [400, 280])
+
+    right_font = pygame.font.SysFont("Calibri", 15, True, False)
+    text_right = right_font.render("Right = right arrow key (→)", True, (128,128,128))
+    screen.blit(text_right, [400, 320])
+
+    rotate_font = pygame.font.SysFont("Calibri", 15, True, False)
+    text_rotate = rotate_font.render("Rotate = up arrow key (↑)", True, (128,128,128))
+    screen.blit(text_rotate, [400, 360])
+
+    drop_font = pygame.font.SysFont("Calibri", 15, True, False)
+    text_drop = drop_font.render("Drop = down arrow key (↓)", True, (128,128,128))
+    screen.blit(text_drop, [400, 400])
 
     high_score_font = pygame.font.SysFont('Calibri', 25, True, False)
     text_high_score = high_score_font.render("High Score: " + str(game.high_score), True, (0, 0, 0))
-    screen.blit(text_high_score, [400, 200])
+    screen.blit(text_high_score, [400, 120])
 
     pygame.display.flip()
     clock.tick(fps)
