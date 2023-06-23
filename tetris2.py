@@ -20,7 +20,6 @@ SoundRotate = pygame.mixer.Sound("Sounds\\Sounds_rotate.ogg")
 
 SoundClear = pygame.mixer.Sound("Sounds\\Sounds_clear.ogg")
 
-
 icon = pygame.image.load("icon2.png")
 pygame.display.set_icon(icon)
 
@@ -293,7 +292,7 @@ while not done:
 
     high_score_font = pygame.font.SysFont('Calibri', 25, True, False)
     text_high_score = high_score_font.render("High Score: " + str(game.high_score), True, (0, 0, 0))
-    screen.blit(text_high_score, [400, 150])
+    screen.blit(text_high_score, [400, 200])
 
     pygame.display.flip()
     clock.tick(fps)
