@@ -71,6 +71,8 @@ class Tetris:
                 new_line.append(0)
             self.field.append(new_line)
         self.new_figure()
+        self.high_score = 0
+        self.high_score = self.load_high_score()
 
     def new_figure(self):
         self.Figure = Figure(3, 0)
@@ -137,6 +139,8 @@ class Tetris:
         if self.intersects():
             self.state = "gameover"
 
+
+
     def break_lines(self):
         lines = 0
         for i in range(1, self.height):
@@ -154,6 +158,21 @@ class Tetris:
         if lines > 0:
             SoundClear.set_volume(1)
             pygame.mixer.Sound.play(SoundClear)
+
+            if self.score > self.high_score:
+                self.high_score = self.score
+                self.save_high_score()
+
+    def load_high_score(self):
+        try:
+            with open("high_score.txt", "r") as file:
+                return int(file.read())
+        except FileNotFoundError:
+            return 0
+
+    def save_high_score(self):
+        with open("high_score.txt", "w") as file:
+            file.write(str(self.high_score))
 
 
 
@@ -183,6 +202,8 @@ while not done:
     pygame.mixer.Sound.play(SoundBackground)
     SoundBackground.set_volume(0.5)
     SoundBackground.play(-1)
+
+
 
     SoundBackground.set_volume(2)
 
@@ -269,6 +290,10 @@ while not done:
     score_font = pygame.font.SysFont('Calibri', 25, True, False)
     text_score = gameover_font.render("Score: " + str(game.score), True, (0, 0, 0))
     screen.blit(text_score, [400, 100])
+
+    high_score_font = pygame.font.SysFont('Calibri', 25, True, False)
+    text_high_score = high_score_font.render("High Score: " + str(game.high_score), True, (0, 0, 0))
+    screen.blit(text_high_score, [400, 150])
 
     pygame.display.flip()
     clock.tick(fps)
