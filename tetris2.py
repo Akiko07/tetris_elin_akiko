@@ -71,7 +71,6 @@ class Tetris:
     def new_figure(self):
         self.Figure = Figure(3, 0)
 
-
     def go_down(self):
         self.Figure.y += 1
         if self.intersects():
@@ -163,7 +162,7 @@ screen = pygame.display.set_mode((380, 670))
 pygame.display.set_caption("Tetris")
 
 done = False
-fps = 2
+fps = 2.5
 clock = pygame.time.Clock()
 counter = 0
 zoom = 30
@@ -180,13 +179,6 @@ GRAY = (128, 128, 128)
 while not done:
     if game.state == "start":
         game.go_down()
-
-    # Erhöhung der Fallgeschwindigkeit basierend auf dem Spielfortschritt
-    if game.score > 0 and game.score % 10 == 0:
-        fps += 0.1
-    # Begrenzung der maximalen Fallgeschwindigkeit
-    if fps > 10:
-        fps = 10
 
     pygame.mixer.Sound.play(SoundBackground)
     SoundBackground.set_volume(0.5)
@@ -260,7 +252,6 @@ while not done:
                 if p in game.Figure.image():
                     pygame.draw.rect(screen, game.Figure.color,
                                      [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y) * zoom, zoom, zoom])
-
 
     gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
     text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (0, 0, 0))
