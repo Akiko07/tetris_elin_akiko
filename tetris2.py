@@ -174,6 +174,10 @@ class Tetris:
         with open("high_score.txt", "w") as file:
             file.write(str(self.high_score))
 
+    def reset_high_score(self):
+        with open("high_score.txt", "w") as file:
+            file.write("0")
+
 
 
 pygame.init()
@@ -209,6 +213,7 @@ while not done:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            game.reset_high_score()
             done = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game.state == "gameover":
