@@ -152,11 +152,6 @@ class Tetris:
             pygame.mixer.Sound.play(SoundClear)
 
 
-    # Funktion zum Neustart des Spiels
-def restart_game(self):
-    global game
-    game = Tetris(20, 10)
-
 
 pygame.init()
 screen = pygame.display.set_mode((700, 700))
@@ -190,6 +185,11 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if game.state == "gameover":
+                mouse_pos = pygame.mouse.get_pos()
+                if restart_button_rect.collidepoint(mouse_pos):
+                    game = Tetris(20, 10)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 game.rotate()
@@ -217,22 +217,6 @@ while not done:
         if pressing_right:
             game.right()
 
-    if game.state == "gameover":
-        # Displaying the "Restart" button
-        restart_button_rect = pygame.Rect(30, 250, 320, 50)
-        pygame.draw.rect(screen, (0, 255, 0), restart_button_rect)
-
-        font = pygame.font.SysFont('Calibri', 32)
-        text = font.render("Neu starten", True, (0, 0, 0))
-        text_rect = text.get_rect(center=restart_button_rect.center)
-        screen.blit(text, text_rect)
-
-        # Checking for user interaction
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if restart_button_rect.collidepoint(event.pos):
-                    restart_game()
-
 
     screen.fill(color = WHITE)
     for i in range(game.height):
@@ -253,6 +237,23 @@ while not done:
                 if p in game.Figure.image():
                     pygame.draw.rect(screen, game.Figure.color,
                                      [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y) * zoom, zoom, zoom])
+
+    if game.state == "gameover":
+        # Displaying the "Restart" button
+        restart_button_rect = pygame.Rect(450, 500, 100, 100)
+        pygame.draw.rect(screen, (0, 0, 0), restart_button_rect)
+
+        font = pygame.font.SysFont('Calibri', 21)
+        text = font.render("Neu starten", True, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = restart_button_rect.center
+        screen.blit(text, text_rect)
+
+        # Checking for user interaction
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if restart_button_rect.collidepoint(event.pos):
+                    game = Tetris(20, 10)
 
     gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
     text_gameover = gameover_font.render("Game Over!", True, (0, 0, 0))
