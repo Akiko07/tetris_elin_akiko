@@ -9,7 +9,7 @@ colors = [
     (117,137,191), # Reverse L
     (253,202,162), # L
     (255,250,129), # Block
-    (249,140,182), # S
+    (224,240,118), # S
     (193,179,215), # T
     (247,140,182) # Reverse S
 ]
@@ -145,8 +145,16 @@ class Tetris:
                 for i2 in range(i, 1, -1):
                     for j in range(self.width):
                         self.field[i2][j] = self.field[i2 - 1][j]
-            self.score += lines ** 2
+        self.score += lines ** 2
+
+        if lines > 0:
             SoundClear.set_volume(1)
+            pygame.mixer.Sound.play(SoundClear)
+
+    # Funktion zum Neustart des Spiels
+def restart_game(self):
+    global game
+    game = Tetris(20, 10)
 
 
 pygame.init()
@@ -173,7 +181,7 @@ while not done:
         game.go_down()
 
     pygame.mixer.Sound.play(SoundBackground)
-    SoundBackground.set_volume(0)
+    SoundBackground.set_volume(0.5)
     SoundBackground.play(-1)
 
     SoundBackground.set_volume(2)
@@ -207,6 +215,23 @@ while not done:
             game.left()
         if pressing_right:
             game.right()
+
+    if game.state == "gameover":
+        # Displaying the "Restart" button
+        restart_button_rect = pygame.Rect(30, 250, 320, 50)
+        pygame.draw.rect(screen, (0, 255, 0), restart_button_rect)
+
+        font = pygame.font.SysFont('Calibri', 32)
+        text = font.render("Neu starten", True, (0, 0, 0))
+        text_rect = text.get_rect(center=restart_button_rect.center)
+        screen.blit(text, text_rect)
+
+        # Checking for user interaction
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if restart_button_rect.collidepoint(event.pos):
+                    restart_game()
+
 
     screen.fill(color = WHITE)
     for i in range(game.height):
