@@ -20,6 +20,7 @@ SoundRotate = pygame.mixer.Sound("Sounds\\Sounds_rotate.ogg")
 
 SoundClear = pygame.mixer.Sound("Sounds\\Sounds_clear.ogg")
 
+
 class Figure:
     x = 0
     y = 0
@@ -34,18 +35,33 @@ class Figure:
         [[4, 5, 9, 10], [2, 6, 5, 9]]  # Rrverse S
     ]
 
+
     def __init__(self, x_coord, y_coord):
         self.x = x_coord
         self.y = y_coord
         self.type = random.randint(0, len(self.Figures)-1)
         self.color = colors[self.type+1]
         self.rotation = 0
+        self.load_highscore()
+
+    def load_highscore(self):
+        try:
+            with open("highscore.txt", "r") as file:
+                self.highscore = int(file.read())
+        except FileNotFoundError:
+            self.highscore = 0
+
+    def save_highscore(self):
+        with open("highscore.txt", "w") as file:
+            file.write(str(self.highscore))
 
     def image(self):
         return self.Figures[self.type][self.rotation]
 
     def rotate(self):
         self.rotation = (self.rotation + 1) % len(self.Figures[self.type])
+
+
 
 class Tetris:
     height = 0
@@ -126,12 +142,13 @@ class Tetris:
         for i in range(4):
             for j in range(4):
                 p = i * 4 + j
-                if  p in self.Figure.image():
+                if p in self.Figure.image():
                     self.field[i + self.Figure.y][j + self.Figure.x] = self.Figure.type+1
         self.break_lines()
         self.new_figure()
         if self.intersects():
             self.state = "gameover"
+
 
     def break_lines(self):
         lines = 0
@@ -156,16 +173,25 @@ def restart_game(self):
     global game
     game = Tetris(20, 10)
 
+    def draw_highscore(self):
+        font = pygame.font.Font(None, 24)
+        highscore_text = font.render("Highscore: " + str(game.highscore), True, WHITE)
+        screen.blit(highscore_text, [30, 50])
 
 pygame.init()
 screen = pygame.display.set_mode((380, 670))
 pygame.display.set_caption("Tetris")
+
+icon = pygame.image.load("icon2.png")
+pygame.display.set_icon(icon)
 
 done = False
 fps = 2.5
 clock = pygame.time.Clock()
 counter = 0
 zoom = 30
+score_x = 30
+score_y = 10
 
 game = Tetris(20, 10)
 pressing_down = False
@@ -232,8 +258,7 @@ while not done:
                 if restart_button_rect.collidepoint(event.pos):
                     restart_game()
 
-
-    screen.fill(color = WHITE)
+    screen.fill(color=WHITE)
     for i in range(game.height):
         for j in range(game.width):
             if game.field[i][j] == 0:
@@ -244,7 +269,6 @@ while not done:
                 just_border = 0
             pygame.draw.rect(screen, color, [30+j*zoom, 30+i*zoom, zoom, zoom], just_border)
 
-
     if game.Figure is not None:
         for i in range(4):
             for j in range(4):
@@ -253,15 +277,19 @@ while not done:
                     pygame.draw.rect(screen, game.Figure.color,
                                      [30+(j + game.Figure.x)* zoom, 30+(i + game.Figure.y) * zoom, zoom, zoom])
 
-    gameover_font = pygame.font.SysFont('Calibri', 65, True, False)
-    text_gameover = gameover_font.render("Game Over!\n Press Esc", True, (0, 0, 0))
+    gameover_font = pygame.font.SysFont('arial', 50, True, False)
+    text_gameover_line1 = gameover_font.render("Game Over!", True, (0, 0, 0))
+    text_gameover_line2 = gameover_font.render("Press Esc", True, (0, 0, 0))
 
     if game.state == "gameover":
-        screen.blit(text_gameover, [30, 250])
 
-    score_font = pygame.font.SysFont('Calibri', 25, True, False)
+        screen.blit(text_gameover_line1, [75, 250])
+        screen.blit(text_gameover_line2, [75, 300])
+
+    score_font = pygame.font.SysFont('arial', 25, True, False)
     text_score = gameover_font.render("Score: " + str(game.score), True, (0, 0, 0))
-    screen.blit(text_score, [0, 0])
+    screen.blit(text_score, [score_x, score_y])
+
 
     pygame.display.flip()
     clock.tick(fps)
